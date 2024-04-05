@@ -1,0 +1,29 @@
+Using Custom Images for a Virtual Machine Scale Set in Azure
+____________________________________________________________
+
+
+
+- Creates the Bash variables for the resource group, virtual machine image, and location 
+
+
+RG='<resource-group>'
+IMAGE='<virtual-machine-resource-id>'
+LOC='<location>'
+
+- Creates the image gallery, definition, and version. 
+
+az sig create --resource-group $RG --location $LOC --gallery-name imageGallery5917
+
+az sig image-definition create --resource-group $RG --location $LOC --gallery-name imageGallery5917 --gallery-image-definition MyimageGallery5917 --publisher Canonical --offer UbuntuServer --sku 18.04-LTS --os-type linux --os-state Specialized --features IsAcceleratedNetworkSupported=True
+
+az sig image-version create --resource-group $RG --location $LOC --gallery-name imageGallery5917 --gallery-image-definition MyimageGallery5917 --gallery-image-version 1.0.0 --virtual-machine $IMAGE
+
+
+
+
+- Creates the virtual machine scale set. 
+
+IMAGE='<Image-Definition-ResourceID>'
+
+az vmss create --resource-group $RG --location $LOC --name VMSSEV --image $IMAGE --specialized --generate-ssh-keys
+
